@@ -26,7 +26,7 @@ namespace WindowsFormsApp1
 
         private void btn_Deserialize_Click(object sender, EventArgs e)
         {
-            TreeNode1 root = deserialize(txtBox_serializedText.Text.Trim());
+            TreeNode root = deserialize(txtBox_serializedText.Text.Trim());           
 
             //string serialized = serialize( root);
 
@@ -39,13 +39,13 @@ namespace WindowsFormsApp1
 
 
         // Encodes a tree to a single string.
-        public string serialize(TreeNode1 root)
+        public string serialize(TreeNode root)
         {
             return serializeNodes(root);
         }
 
         // Decodes your encoded data to tree.
-        public TreeNode1 deserialize(string data)
+        public TreeNode deserialize(string data)
         {
             string trimmedData = data.Trim('[', ']');
             string[] stringNodes = trimmedData.Split(',');
@@ -72,7 +72,7 @@ namespace WindowsFormsApp1
             return deSerializeNodes(intNodes);
         }
 
-        public TreeNode1 deSerializeNodes(List<int?> intNodes)
+        public TreeNode deSerializeNodes(List<int?> intNodes)
         {
             int? firstNode = intNodes.FirstOrDefault();
 
@@ -81,18 +81,18 @@ namespace WindowsFormsApp1
                 return null;
             }
 
-            TreeNode1 rootNode = new TreeNode1(firstNode.Value);
+            TreeNode rootNode = new TreeNode(firstNode.Value);
 
             deSerializeNode(rootNode, intNodes, 1);
 
             return rootNode;
         }
 
-        public void deSerializeNode(TreeNode1 node, List<int?> intNodes, int index)
+        public void deSerializeNode(TreeNode node, List<int?> intNodes, int index)
         {
             if (intNodes[index] != null)
             {
-                node.left = new TreeNode1(intNodes[index +1].Value);
+                node.left = new TreeNode(intNodes[index +1].Value);
                 if (intNodes[index + 2] != null)
                 {
                     deSerializeNode(node.left, intNodes, index + 2);
@@ -105,7 +105,7 @@ namespace WindowsFormsApp1
 
             if (intNodes[index + 1] != null)
             {
-                node.right = new TreeNode1(intNodes[index + 1].Value);
+                node.right = new TreeNode(intNodes[index + 1].Value);
                 if (intNodes[index + 4] != null)
                 {
                     deSerializeNode(node.right, intNodes, index + 4);
@@ -118,7 +118,7 @@ namespace WindowsFormsApp1
 
         }
 
-        public string serializeNodes(TreeNode1 rootNode)
+        public string serializeNodes(TreeNode rootNode)
         {
 
             string nodeString = "[" + rootNode.val;
@@ -127,7 +127,7 @@ namespace WindowsFormsApp1
             return nodeString + "]";
         }
 
-        public void serializeNode(TreeNode1 node, string nodeString)
+        public void serializeNode(TreeNode node, string nodeString)
         {
             if (node.left != null)
             {

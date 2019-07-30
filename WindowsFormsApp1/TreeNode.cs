@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace WindowsFormsApp1
 {
-    public class TreeNode1
+    public class TreeNode
     {
         public int val;
-        public TreeNode1 left;
-        public TreeNode1 right;
-        public TreeNode1(int x) { val = x; }
+        public TreeNode left;
+        public TreeNode right;
+        public TreeNode(int x) { val = x; }
     }
 }
