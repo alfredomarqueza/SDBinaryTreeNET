@@ -26,7 +26,11 @@ namespace WindowsFormsApp1
 
         private void btn_Deserialize_Click(object sender, EventArgs e)
         {
-            TreeNode root = deserialize(txtBox_serializedText.Text.Trim());           
+            Codec codec = new Codec();
+
+            TreeNode root = codec.deserialize(txtBox_serializedText.Text.Trim('[', ']'));
+
+            PopulateTreeViewFromRoot(root);
 
             //string serialized = serialize( root);
 
@@ -36,7 +40,43 @@ namespace WindowsFormsApp1
 
         }
 
+        /// <summary>
+        /// Function to populate TreeView from root
+        /// </summary>
+        private void PopulateTreeViewFromRoot(TreeNode root)
+        {
 
+            System.Windows.Forms.TreeNode treeViewNodeRoot = new System.Windows.Forms.TreeNode();
+            treeViewNodeRoot.Text = root.val.ToString();
+            
+            treeViewBinaryTree.Nodes.Add(treeViewNodeRoot);
+            PopulateTreeView(root, treeViewNodeRoot);
+        }
+
+        /// <summary>
+        /// Recursive function to populate TreeView nodes
+        /// </summary>
+        private void PopulateTreeView(TreeNode parentnode, System.Windows.Forms.TreeNode parentTreeViewNode)
+        {            
+
+            if (parentnode.left != null)
+            {
+                System.Windows.Forms.TreeNode treeViewNodeLeft = new System.Windows.Forms.TreeNode();
+                treeViewNodeLeft.Text = parentnode.left.val.ToString();
+                parentTreeViewNode.Nodes.Add(treeViewNodeLeft);
+
+                PopulateTreeView(parentnode.left, treeViewNodeLeft);
+            }
+
+            if (parentnode.right != null)
+            {
+                System.Windows.Forms.TreeNode treeViewNodeRight = new System.Windows.Forms.TreeNode();
+                treeViewNodeRight.Text = parentnode.right.val.ToString();
+                parentTreeViewNode.Nodes.Add(treeViewNodeRight);
+                PopulateTreeView(parentnode.right, treeViewNodeRight);
+            }
+
+        }
 
         // Encodes a tree to a single string.
         public string serialize(TreeNode root)

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.btn_Serialize = new System.Windows.Forms.Button();
-            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.treeViewBinaryTree = new System.Windows.Forms.TreeView();
             this.txtBox_serializedText = new System.Windows.Forms.TextBox();
             this.btn_Deserialize = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -44,12 +44,12 @@
             this.btn_Serialize.UseVisualStyleBackColor = true;
             this.btn_Serialize.Click += new System.EventHandler(this.btn_Serialize_Click);
             // 
-            // treeView1
+            // treeViewBinaryTree
             // 
-            this.treeView1.Location = new System.Drawing.Point(68, 77);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(181, 158);
-            this.treeView1.TabIndex = 2;
+            this.treeViewBinaryTree.Location = new System.Drawing.Point(68, 77);
+            this.treeViewBinaryTree.Name = "treeViewBinaryTree";
+            this.treeViewBinaryTree.Size = new System.Drawing.Size(181, 158);
+            this.treeViewBinaryTree.TabIndex = 2;
             // 
             // txtBox_serializedText
             // 
@@ -67,6 +67,7 @@
             this.btn_Deserialize.TabIndex = 4;
             this.btn_Deserialize.Text = "<< Deserialize <<";
             this.btn_Deserialize.UseVisualStyleBackColor = true;
+            this.btn_Deserialize.Click += new System.EventHandler(this.btn_Deserialize_Click);
             // 
             // Form1
             // 
@@ -75,7 +76,7 @@
             this.ClientSize = new System.Drawing.Size(616, 314);
             this.Controls.Add(this.btn_Deserialize);
             this.Controls.Add(this.txtBox_serializedText);
-            this.Controls.Add(this.treeView1);
+            this.Controls.Add(this.treeViewBinaryTree);
             this.Controls.Add(this.btn_Serialize);
             this.Name = "Form1";
             this.Text = "Serialize and Deserialize Binary Tree";
@@ -87,7 +88,7 @@
         #endregion
 
         private System.Windows.Forms.Button btn_Serialize;
-        private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.TreeView treeViewBinaryTree;
         private System.Windows.Forms.TextBox txtBox_serializedText;
         private System.Windows.Forms.Button btn_Deserialize;
     }
