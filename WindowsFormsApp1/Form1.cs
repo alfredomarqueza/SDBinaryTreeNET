@@ -11,7 +11,6 @@ using System.Windows.Forms;
 namespace WindowsFormsApp1
 {
     
-
     public partial class Form1 : Form
     {        
 
@@ -22,21 +21,54 @@ namespace WindowsFormsApp1
 
         private void btn_Serialize_Click(object sender, EventArgs e)
         {
+            Codec codec = new Codec();
+
+            TreeNode root = GetTreeFromTreeView();
+
+            string serializedTree = codec.serialize(root);
+
+            txtBox_serializedText.Text = serializedTree;
         }
 
         private void btn_Deserialize_Click(object sender, EventArgs e)
         {
             Codec codec = new Codec();
 
+            treeViewBinaryTree.Nodes.Clear();
+
             TreeNode root = codec.deserialize(txtBox_serializedText.Text.Trim('[', ']'));
 
             PopulateTreeViewFromRoot(root);
 
-            //string serialized = serialize( root);
+            treeViewBinaryTree.ExpandAll();
 
-            // Your Codec object will be instantiated and called as such:
-            // Codec codec = new Codec();
-            // codec.deserialize(codec.serialize(root));
+        }
+
+        private TreeNode GetTreeFromTreeView()
+        {
+            int rootNumber = Convert.ToInt32(treeViewBinaryTree.Nodes[0].Text);
+
+            TreeNode root = new TreeNode(rootNumber);
+
+            RSetTreeNodes(root, treeViewBinaryTree.Nodes[0]);
+
+            return root;
+        }
+
+        private void RSetTreeNodes(TreeNode node, System.Windows.Forms.TreeNode treeViewNode)
+        {
+
+            if (treeViewNode.Nodes.Count > 0)
+            {
+                node.left = new TreeNode(Convert.ToInt32(treeViewNode.Nodes[0].Text));
+                RSetTreeNodes(node.left, treeViewNode.Nodes[0]);
+            }
+
+            if (treeViewNode.Nodes.Count > 1)
+            {
+                node.right = new TreeNode(Convert.ToInt32(treeViewNode.Nodes[1].Text));
+                RSetTreeNodes(node.right, treeViewNode.Nodes[1]);
+            }
 
         }
 
@@ -50,13 +82,13 @@ namespace WindowsFormsApp1
             treeViewNodeRoot.Text = root.val.ToString();
             
             treeViewBinaryTree.Nodes.Add(treeViewNodeRoot);
-            PopulateTreeView(root, treeViewNodeRoot);
+            RPopulateTreeView(root, treeViewNodeRoot);
         }
 
         /// <summary>
         /// Recursive function to populate TreeView nodes
         /// </summary>
-        private void PopulateTreeView(TreeNode parentnode, System.Windows.Forms.TreeNode parentTreeViewNode)
+        private void RPopulateTreeView(TreeNode parentnode, System.Windows.Forms.TreeNode parentTreeViewNode)
         {            
 
             if (parentnode.left != null)
@@ -65,7 +97,7 @@ namespace WindowsFormsApp1
                 treeViewNodeLeft.Text = parentnode.left.val.ToString();
                 parentTreeViewNode.Nodes.Add(treeViewNodeLeft);
 
-                PopulateTreeView(parentnode.left, treeViewNodeLeft);
+                RPopulateTreeView(parentnode.left, treeViewNodeLeft);
             }
 
             if (parentnode.right != null)
@@ -73,132 +105,49 @@ namespace WindowsFormsApp1
                 System.Windows.Forms.TreeNode treeViewNodeRight = new System.Windows.Forms.TreeNode();
                 treeViewNodeRight.Text = parentnode.right.val.ToString();
                 parentTreeViewNode.Nodes.Add(treeViewNodeRight);
-                PopulateTreeView(parentnode.right, treeViewNodeRight);
+                RPopulateTreeView(parentnode.right, treeViewNodeRight);
             }
-
+        
         }
 
-        // Encodes a tree to a single string.
-        public string serialize(TreeNode root)
+        private void btn_Remove_Click(object sender, EventArgs e)
         {
-            return serializeNodes(root);
+            treeViewBinaryTree.Nodes.Remove(treeViewBinaryTree.SelectedNode);
         }
 
-        // Decodes your encoded data to tree.
-        public TreeNode deserialize(string data)
+        private void btnAdd_Click(object sender, EventArgs e)
         {
-            string trimmedData = data.Trim('[', ']');
-            string[] stringNodes = trimmedData.Split(',');
-            List<int?> intNodes = new List<int?>();
-
-            foreach (string stringNode in stringNodes)
+            if (treeViewBinaryTree.SelectedNode == null && treeViewBinaryTree.Nodes.Count > 0)
             {
-                if (stringNode == "null")
-                {
-                    intNodes.Add(null);
-                    continue;
-                }
-                int result;
-                if (int.TryParse(stringNode, out result))
-                {
-                    intNodes.Add(result);
-                }
-                else
-                {
-                    intNodes.Add(null);
-                }
+                MessageBox.Show("Please select a node", "Parent node missing", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
-            return deSerializeNodes(intNodes);
-        }
-
-        public TreeNode deSerializeNodes(List<int?> intNodes)
-        {
-            int? firstNode = intNodes.FirstOrDefault();
-
-            if (firstNode == null)
+            if (treeViewBinaryTree.Nodes.Count == 0)
             {
-                return null;
+                System.Windows.Forms.TreeNode root = new System.Windows.Forms.TreeNode();
+                root.Text = numericUpDown.Text;
+                numericUpDown.Value++;
+                treeViewBinaryTree.Nodes.Add(root);                
+                return;
             }
 
-            TreeNode rootNode = new TreeNode(firstNode.Value);
-
-            deSerializeNode(rootNode, intNodes, 1);
-
-            return rootNode;
-        }
-
-        public void deSerializeNode(TreeNode node, List<int?> intNodes, int index)
-        {
-            if (intNodes[index] != null)
+            if (treeViewBinaryTree.SelectedNode != null)
             {
-                node.left = new TreeNode(intNodes[index +1].Value);
-                if (intNodes[index + 2] != null)
+                if (treeViewBinaryTree.SelectedNode.Nodes.Count == 2)
                 {
-                    deSerializeNode(node.left, intNodes, index + 2);
+                    MessageBox.Show("No more children allowed for this node", "Only two children allowed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
-                if (intNodes[index + 3] != null)
-                {
-                    deSerializeNode(node.left, intNodes, index + 3);
-                }
+
+                System.Windows.Forms.TreeNode node = new System.Windows.Forms.TreeNode();
+                node.Text = numericUpDown.Text;
+                numericUpDown.Value++;
+                treeViewBinaryTree.SelectedNode.Nodes.Add(node);
+                treeViewBinaryTree.SelectedNode.Expand();
+                return;
             }
-
-            if (intNodes[index + 1] != null)
-            {
-                node.right = new TreeNode(intNodes[index + 1].Value);
-                if (intNodes[index + 4] != null)
-                {
-                    deSerializeNode(node.right, intNodes, index + 4);
-                }
-                if (intNodes[index + 5] != null)
-                {
-                    deSerializeNode(node.right, intNodes, index + 5);
-                }
-            }            
 
         }
-
-        public string serializeNodes(TreeNode rootNode)
-        {
-
-            string nodeString = "[" + rootNode.val;
-            serializeNode(rootNode, nodeString);
-
-            return nodeString + "]";
-        }
-
-        public void serializeNode(TreeNode node, string nodeString)
-        {
-            if (node.left != null)
-            {
-                nodeString += "," + node.left.val;
-            }
-            else
-            {
-                nodeString += ",null";
-            }
-
-            if (node.right != null)
-            {
-                nodeString += "," + node.right.val;
-            }
-            else
-            {
-                nodeString += ",null";
-            }
-
-            if (node.left != null)
-            {
-                serializeNode(node.left, nodeString);
-            }
-
-            if (node.right != null)
-            {
-                serializeNode(node.right, nodeString);
-            }
-
-
-        }
-
     }
 }

@@ -9,11 +9,27 @@ namespace WindowsFormsApp1
     public class Codec
     {
 
-        // Encodes a tree to a single string.
-        //public string serialize(TreeNode root)
-        //{
+        public string rserialize(TreeNode root, string str)
+        {
+            // Recursive serialization.
+            if (root == null)
+            {
+                str += "null,";
+            }
+            else
+            {
+                str += root.val + ",";
+                str = rserialize(root.left, str);
+                str = rserialize(root.right, str);
+            }
+            return str;
+        }
 
-        //}
+        // Encodes a tree to a single string.
+        public string serialize(TreeNode root)
+        {
+            return rserialize(root, "");
+        }
 
         // Decodes your encoded data to tree.
         public TreeNode deserialize(String data)
