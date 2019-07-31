@@ -1,4 +1,7 @@
-﻿using System;
+﻿// by @alfredomarqueza 2019
+// codec class
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,28 +10,30 @@ using System.Threading.Tasks;
 namespace WindowsFormsApp1
 {
     public class Codec
-    {
-
-        public string rserialize(TreeNode root, string str)
-        {
-            // Recursive serialization.
-            if (root == null)
-            {
-                str += "null,";
-            }
-            else
-            {
-                str += root.val + ",";
-                str = rserialize(root.left, str);
-                str = rserialize(root.right, str);
-            }
-            return str;
-        }
+    {        
 
         // Encodes a tree to a single string.
         public string serialize(TreeNode root)
         {
-            return rserialize(root, "");
+            StringBuilder str = new StringBuilder();
+            StringBuilder result = rserialize(root, str);
+            return result.ToString();
+        }
+
+        private StringBuilder rserialize(TreeNode root, StringBuilder str)
+        {
+            // Recursive serialization.
+            if (root == null)
+            {
+                str.Append("null,");
+            }
+            else
+            {
+                str.Append(root.val + ",");
+                str = rserialize(root.left, str);
+                str = rserialize(root.right, str);
+            }
+            return str;
         }
 
         // Decodes your encoded data to tree.
@@ -39,9 +44,9 @@ namespace WindowsFormsApp1
             return rdeserialize(data_list);
         }
 
-        public TreeNode rdeserialize(List<string> l)
+        private TreeNode rdeserialize(List<string> l)
         {
-            if(l.Count == 0)
+            if(!l.Any())
                 return null;
 
             // Recursive deserialization.

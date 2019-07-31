@@ -1,4 +1,7 @@
-﻿using System;
+﻿// By @alfredomarqueza 2019
+//
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,6 +29,10 @@ namespace WindowsFormsApp1
             TreeNode root = GetTreeFromTreeView();
 
             string serializedTree = codec.serialize(root);
+
+            serializedTree = serializedTree.Trim(',');
+
+            serializedTree = string.Format("[{0}]", serializedTree);
 
             txtBox_serializedText.Text = serializedTree;
         }
@@ -112,7 +119,8 @@ namespace WindowsFormsApp1
 
         private void btn_Remove_Click(object sender, EventArgs e)
         {
-            treeViewBinaryTree.Nodes.Remove(treeViewBinaryTree.SelectedNode);
+            if(treeViewBinaryTree.SelectedNode != null)
+                treeViewBinaryTree.Nodes.Remove(treeViewBinaryTree.SelectedNode);
         }
 
         private void btnAdd_Click(object sender, EventArgs e)

@@ -58,11 +58,12 @@
             // 
             // txtBox_serializedText
             // 
-            this.txtBox_serializedText.Location = new System.Drawing.Point(422, 159);
+            this.txtBox_serializedText.Location = new System.Drawing.Point(410, 147);
+            this.txtBox_serializedText.Multiline = true;
             this.txtBox_serializedText.Name = "txtBox_serializedText";
-            this.txtBox_serializedText.Size = new System.Drawing.Size(171, 20);
+            this.txtBox_serializedText.Size = new System.Drawing.Size(196, 53);
             this.txtBox_serializedText.TabIndex = 3;
-            this.txtBox_serializedText.Text = "[1,2,3,null,null,4,5]";
+            this.txtBox_serializedText.Text = "[1,2,4,null,null,5,null,null,3,6,null,null,null]";
             // 
             // btn_Deserialize
             // 
